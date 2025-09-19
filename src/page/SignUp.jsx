@@ -87,7 +87,7 @@ const Signup = () => {
           <PwdTitle>비밀번호 확인</PwdTitle>
           <PwdCheckContainer>
             <PwdInput
-              type="password"
+              type={showPw2 ? "text" : "password"}
               placeholder="비밀번호를 다시 입력해주세요."
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
@@ -95,7 +95,7 @@ const Signup = () => {
             ></PwdInput>
             <EyeButton
               type="button"
-              onClick={() => setShowPw1((v) => !v)}
+              onClick={() => setShowPw2((v) => !v)}
               aria-label="비밀번호 보기"
             >
               <img src={Picture} alt="" />

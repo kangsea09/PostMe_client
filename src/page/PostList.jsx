@@ -1,8 +1,31 @@
-import React from "react";
+import React , {useEffect, useState} from "react";
 import styled from "@emotion/styled";
 import Post from "../assets/Frame.svg";
+import { getPost } from "../apis/post";
 
 const PostList = () => {
+  const [postList, setPostList] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async ()=> {
+      const res = await getPost();
+      setPostList(res);
+    }
+    fetchData();
+  }, []);
+  
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date
+    .toLocaleDateString("ko-KR", {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .replace(/\./g, "/") // "25. 09. 19." → "25/09/19"
+    .replace(/\s/g, ""); // 공백 제거
+};
+
   return (
     <Body>
       <TotalContainer>
@@ -16,12 +39,15 @@ const PostList = () => {
               </FirstList>
               <List>게시글 작성하기</List>
             </ListButton>
-            <ListCard>
+            {postList.map((post)=> (
+              <ListCard key={post.id}>
               <Title>
-                <InputTitle>제목이 들어가요</InputTitle>
-                <span>22/08/16</span>
+                <InputTitle>{post.title}</InputTitle>
+                <span>{formatDate(post.createdAt)}</span>
               </Title>
             </ListCard>
+            ))}
+            
           </ListContainer>
         </ListBox>
       </TotalContainer>

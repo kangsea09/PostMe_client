@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
 
-  const isVaild = email.trim().length > 0 &&password.length >= 6;
+  const isVaild = email.trim().length > 0 && password.length >= 6;
 
   const handleSubmit = async () => {
     if(!email || !password) {
@@ -49,7 +49,7 @@ const Login = () => {
           <PwdTitle>비밀번호</PwdTitle>
           <PwdContainer>
             <PwdInput
-              type="password"
+              type={showPw ? "text" : "password"}
               placeholder="비밀번호를 입력해주세요."
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -65,8 +65,9 @@ const Login = () => {
           </PwdContainer>
         </Pwdbox>
 
-
-        <LoginButton type="button" onClick={handleSubmit} disabled={!isVaild}>로그인</LoginButton>
+        <LoginButton type="button" onClick={handleSubmit} disabled={!isVaild}>
+          로그인
+        </LoginButton>
         <NoUser>
           계정이 없으신가요?
           <JoinUser href="/signup">회원가입</JoinUser>
