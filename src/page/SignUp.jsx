@@ -1,8 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import Picture from "../assets/eye-img.svg";
+import { signup } from "../apis/auth";
 
-const Login = () => {
+const Signup = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+
+  const [showPw1, setShowPw1] = useState(false)
+  const [showPw2, setShowPw2] = useState(false)
+
+  const isValid =
+    name.length > 0 &&
+    email.trim().length > 0 &&
+    password.length >= 6 &&
+    password2.length >= 6 &&
+    password === password2;
+
+
+  const handleSubmit = async () => {
+    if (!name || !email || !password || !password2) {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+    if(password.length < 6) {
+      alert("비밀번호는 6자리 이상이여야 합니다.");
+      return;
+    }
+    if(password !== password2) {
+      alert("비밀번호가 서로 일치하지 않습니다.");
+      return;
+    }
+
+    try {
+      const res = await signup({ name, email, password });
+      localStorage.setItem("accessToken", res.token);
+      alert("회원가입이 완료되었습니다!");
+      // 필요 시 이동
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <Body>
       <TotalContainer>
@@ -11,30 +51,65 @@ const Login = () => {
           <Line></Line>
         </LoginBox>
         <IdContainer>
-          <IdTitle>아이디</IdTitle>
-          <IdInput type="text" placeholder="아이디를 입력해주세요." />
+          <IdTitle>이름</IdTitle>
+          <IdInput
+            type="text"
+            placeholder="이름을 입력해주세요."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </IdContainer>
+        {/* 아이디 */}
+        <IdContainer>
+          <IdTitle>이메일</IdTitle>
+          <IdInput
+            type="email"
+            placeholder="이메일을 입력해주세요."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </IdContainer>
         <Pwdbox>
           <PwdTitle>비밀번호</PwdTitle>
           <PwdContainer>
             <PwdInput
-              type="password"
+              type={showPw1 ? "text" : "password"}
               placeholder="비밀번호를 입력해주세요."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={6}
             ></PwdInput>
-            <img src={Picture} alt="" />
+            <EyeButton type="button" onClick={() => setShowPw1((v) => !v)}>
+              <img src={Picture} alt="" />
+            </EyeButton>
           </PwdContainer>
+
           <PwdTitle>비밀번호 확인</PwdTitle>
           <PwdCheckContainer>
             <PwdInput
               type="password"
               placeholder="비밀번호를 다시 입력해주세요."
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
+              minLength={6}
             ></PwdInput>
+            <EyeButton
+              type="button"
+              onClick={() => setShowPw1((v) => !v)}
+              aria-label="비밀번호 보기"
+            >
+              <img src={Picture} alt="" />
+            </EyeButton>
           </PwdCheckContainer>
         </Pwdbox>
-        <LoginButton>회원가입</LoginButton>
+
+        <LoginButton onClick={handleSubmit} disabled={!isValid}>
+          회원가입
+        </LoginButton>
+
         <NoUser>
-          계정이 없으신가요?
-          <JoinUser href="https://www.naver.com/">회원가입</JoinUser>
+          계정이 이미 있으신가요?
+          <JoinUser href="/login">로그인</JoinUser>
         </NoUser>
       </TotalContainer>
     </Body>
@@ -148,4 +223,19 @@ const JoinUser = styled.a`
   text-decoration: none;
 `;
 
-export default Login;
+const EyeButton = styled.button`
+  border: none;
+  background: transparent;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+  }
+`;
+
+export default Signup;

@@ -1,8 +1,34 @@
-import React from "react";
+import React, { isValidElement, useState } from "react";
 import styled from "@emotion/styled";
 import Picture from "../assets/eye-img.svg";
+import {login} from "../apis/auth";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
+
+  const isVaild = email.trim().length > 0 &&password.length >= 6;
+
+  const handleSubmit = async () => {
+    if(!email || !password) {
+        alert("이메일과 비밀번호를 입력해주세요.");
+        return;
+    }
+    if(password.length < 6) {
+      alert("비밀번호는 6자 이상이어야 합니다.");
+      return;
+    }
+
+  try {
+    const res= await login({email, password});
+    localStorage.setItem("accessToken", res.token);
+    alert("로그인 성공!");
+  }catch(err) {
+    console.error(err);
+  }
+};
+
   return (
     <Body>
       <TotalContainer>
@@ -11,8 +37,13 @@ const Login = () => {
           <Line></Line>
         </LoginBox>
         <IdContainer>
-          <IdTitle>아이디</IdTitle>
-          <IdInput type="text" placeholder="아이디를 입력해주세요." />
+          <IdTitle>이메일</IdTitle>
+          <IdInput
+            type="text"
+            placeholder="이메일을 입력해주세요."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </IdContainer>
         <Pwdbox>
           <PwdTitle>비밀번호</PwdTitle>
@@ -20,14 +51,25 @@ const Login = () => {
             <PwdInput
               type="password"
               placeholder="비밀번호를 입력해주세요."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={6}
             ></PwdInput>
-            <img src={Picture} alt="" />
+            <EyeButton
+              type="button"
+              onClick={() => setShowPw((v) => !v)}
+              title={showPw ? "숨기기" : "보기"}
+            >
+              <img src={Picture} alt="" />
+            </EyeButton>
           </PwdContainer>
         </Pwdbox>
-        <LoginButton>로그인</LoginButton>
+
+
+        <LoginButton type="button" onClick={handleSubmit} disabled={!isVaild}>로그인</LoginButton>
         <NoUser>
           계정이 없으신가요?
-          <JoinUser href="https://www.naver.com/">회원가입</JoinUser>
+          <JoinUser href="/signup">회원가입</JoinUser>
         </NoUser>
       </TotalContainer>
     </Body>
@@ -132,6 +174,21 @@ const NoUser = styled.span`
 const JoinUser = styled.a`
   color: #3d8aff;
   text-decoration: none;
+`;
+
+const EyeButton = styled.button`
+  border: none;
+  background: transparent;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+  }
 `;
 
 export default Login;
