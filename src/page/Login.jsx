@@ -164,6 +164,11 @@ const LoginButton = styled.button`
   opacity: calc(50%);
   border: 0;
   border-radius: 4px;
+
+  &:hover {
+    background-color: #3d8aff;
+    opacity: calc(100%);
+  }
 `;
 
 const NoUser = styled.span`
