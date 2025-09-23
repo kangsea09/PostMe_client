@@ -2,11 +2,14 @@ import React, { isValidElement, useState } from "react";
 import styled from "@emotion/styled";
 import Picture from "../assets/eye-img.svg";
 import {login} from "../apis/auth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
+
+  const navigate = useNavigate();
 
   const isVaild = email.trim().length > 0 && password.length >= 6;
 
@@ -24,6 +27,7 @@ const Login = () => {
     const res= await login({email, password});
     localStorage.setItem("accessToken", res.token);
     alert("로그인 성공!");
+    navigate("/");
   }catch(err) {
     console.error(err);
   }

@@ -1,22 +1,22 @@
 import { api } from "./apiClient"
 
 export const getPost = async () => {
-    const res = await api.get("/api/posts");
-    return res.data;
+    const {data} = await api.get("/api/posts");
+    return data;
+};
+
+export const checkPost = async (id) => {
+  const { data } = await api.get(`/api/posts/${id}`);
+  return data;
 };
 
 export const postcreate = async (payload) => {
-    const { data } = await api.post("/api/auth/postcreate", payload);
+    const { data } = await api.post("/api/postcreate", payload);
     return data;
 }
 
 export const postedit = async (payload) => {
-    const { data } = await api.post("/api/auth/postedit", payload);
+    const { data } = await api.post("/api/postedit", payload);
     return data;
 }
 
-
-export const checkPost = async (payload) => {
-  const { data } = await api.post("/api/auth/checkPost", payload);
-  return data;
-};

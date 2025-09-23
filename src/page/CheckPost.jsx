@@ -1,31 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Picture from "../assets/arrow.svg";
 import { checkPost } from "../apis/post";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CheckPost = () => {
+  const [post, setPost] = useState({});
+  const navigate = useNavigate();
+  const {id} = useParams();
+  
+  const toPostList = () => {
+    navigate("/")
+  }
+
+  useEffect(()=> {
+    const fetchData = async() => {
+      const res = await checkPost(id);
+      setPost(res);
+    };
+    fetchData();
+  }, []);
+
   return (
     <Body>
       <TotalContainer>
         <TextList>
-          <ListText>게시물 목록</ListText>
+          <ListText onClick={toPostList}>게시물 목록</ListText>
           <img src={Picture} alt="" />
           <CheckText>게시글 상세 확인</CheckText>
         </TextList>
-        <TextTitle>게시글 제목이 나옵니다</TextTitle>
+        <TextTitle>{post.title}</TextTitle>
         <BtnContainer>
           <UpdateBtn>수정하기</UpdateBtn>
           <DeleteBtn>삭제하기</DeleteBtn>
         </BtnContainer>
         <Line />
         <ContentText>
-          게시글 내용이 나옵니다 게시글 내용이 나옵니다게시글 내용이
-          나옵니다게시글 내용이 나옵니다게시글 내용이 나옵니다게시글 내용이
-          나옵니다게시글 내용이 나옵니다게시글 내용이 나옵니다게시글 내용이
-          나옵니다게시글 내용이 나옵니다게시글 내용이 나옵니다게시글 내용이
-          나옵니다게시글 내용이 나옵니다게시글 내용이 나옵니다게시글 내용이
-          나옵니다게시글 내용이 나옵니다게시글 내용이 나옵니다게시글 내용이
-          나옵니다
+          {post.content}
         </ContentText>
       </TotalContainer>
     </Body>
@@ -59,6 +70,7 @@ const TextList = styled.div`
 const ListText = styled.span`
   font-size: 18pt;
   color: #999999;
+  cursor: pointer;
 `;
 const CheckText = styled.span`
   font-size: 18pt;

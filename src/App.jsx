@@ -11,10 +11,10 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/postlist" element={<PostList />} />
-      <Route path="/checkPost" element={<CheckPost />} />
-      <Route path="/postcreate" element={<PostCreate />} />
-      <Route path="/postedit" element={<PostEdit />} />
+      <Route path="/" element={<PostList />} />
+      <Route path="/check-post/:id" element={<CheckPost />} />
+      <Route path="/post-create" element={<PostCreate />} />
+      <Route path="/post-edit" element={<PostEdit />} />
     </Routes>
   );
 }
