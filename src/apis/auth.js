@@ -9,8 +9,3 @@ export const login = async (payload) => {
     const {data} = await api.post("/api/auth/login", payload);
     return data;
 };
-
-export const checkPost = async (payload) => {
-  const { data } = await api.post("/api/auth/checkPost", payload);
-  return data;
-};

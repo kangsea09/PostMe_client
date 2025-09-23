@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Picture from "../assets/arrow.svg";
-import { checkPost } from "../apis/auth";
+import { checkPost } from "../apis/post";
 
 const CheckPost = () => {
   return (
