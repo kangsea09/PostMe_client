@@ -43,7 +43,7 @@ const handleClick = (id) => {
                 <img src={Post} alt="" />
                 <First>최신순</First>
               </FirstList>
-              <List>게시글 작성하기</List>
+              <List onClick={() => navigate("/post-create")}>게시글 작성하기</List>
             </ListButton>
             {postList.map((post)=> (
               <ListCard key={post.id} onClick={()=> handleClick(post.id)}>

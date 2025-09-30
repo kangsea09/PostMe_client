@@ -2,13 +2,38 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import Vector from "../assets/arrow.svg";
 import { postcreate } from "../apis/post";
+import { useNavigate } from "react-router-dom";
 
 const PostCreate = () => {
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
+  const navigate = useNavigate();
+
+  const isVaild = title.trim().length > 0 && content.trim().length > 0;
+
+  const handleSubmit = async () => {
+      if(!title) {
+          alert("제목을 입력하세요.");
+          return;
+      }
+      if (!content) {
+        alert("내용을 입력하세요.");
+        return;
+      }
+  
+    try {
+      const res= await postcreate({title, content});
+      navigate(`/check-post/${res.id}`);
+    }catch(err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Body>
       <Container>
         <Header>
-          <PostList>게시글 목록</PostList>
+          <PostList onClick={() => navigate("/")}>게시글 목록</PostList>
           <img src={Vector}></img>
           <MakePost>게시글 작성</MakePost>
         </Header>
@@ -16,12 +41,23 @@ const PostCreate = () => {
           <Title>제목</Title>
           <PostTitleBox
             type="text"
+            value={title}
             placeholder="제목을 입력해주세요"
+            onChange={(e) => setTitle(e.target.value)}
           ></PostTitleBox>
           <Detail>내용</Detail>
-          <DetailBox type="text" placeholder="내용을 입력해주세요"></DetailBox>
+          <DetailBox
+            type="text"
+            value={content}
+            placeholder="내용을 입력해주세요"
+            onChange={(e) => setContent(e.target.value)}
+          ></DetailBox>
         </Main>
-        <PostMakeButton type="button">
+        <PostMakeButton
+        type="button"
+        onClick={handleSubmit}
+        disabled={!isVaild}
+        >
           <ButtonText>올리기</ButtonText>
         </PostMakeButton>
       </Container>

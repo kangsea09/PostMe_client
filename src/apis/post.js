@@ -11,7 +11,7 @@ export const checkPost = async (id) => {
 };
 
 export const postcreate = async (payload) => {
-    const { data } = await api.post("/api/postcreate", payload);
+    const { data } = await api.post("/api/posts", payload);
     return data;
 }
 

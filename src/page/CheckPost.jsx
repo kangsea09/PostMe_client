@@ -3,20 +3,24 @@ import styled from "@emotion/styled";
 import Picture from "../assets/arrow.svg";
 import { checkPost } from "../apis/post";
 import { useNavigate, useParams } from "react-router-dom";
+import { me } from "../apis/auth";
 
 const CheckPost = () => {
   const [post, setPost] = useState({});
+  const [isOwn, setIsOwn] = useState(false);
   const navigate = useNavigate();
-  const {id} = useParams();
-  
-  const toPostList = () => {
-    navigate("/")
-  }
+  const { id } = useParams();
 
-  useEffect(()=> {
-    const fetchData = async() => {
+  const toPostList = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
       const res = await checkPost(id);
+      const data = await me();
       setPost(res);
+      setIsOwn(res.author.id == data.id);
     };
     fetchData();
   }, []);
@@ -31,13 +35,15 @@ const CheckPost = () => {
         </TextList>
         <TextTitle>{post.title}</TextTitle>
         <BtnContainer>
-          <UpdateBtn>수정하기</UpdateBtn>
-          <DeleteBtn>삭제하기</DeleteBtn>
+          {isOwn && (
+            <>
+              <UpdateBtn>수정하기</UpdateBtn>
+              <DeleteBtn>삭제하기</DeleteBtn>
+            </>
+          )}
         </BtnContainer>
         <Line />
-        <ContentText>
-          {post.content}
-        </ContentText>
+        <ContentText>{post.content}</ContentText>
       </TotalContainer>
     </Body>
   );
@@ -122,6 +128,6 @@ const Line = styled.hr`
   margin-bottom: 36px;
 `;
 
-const ContentText=styled.span``
+const ContentText = styled.span``;
 
 export default CheckPost;
