@@ -34,7 +34,7 @@ const Login = () => {
 };
 
   return (
-    <Body>
+    <Body>  
       <TotalContainer>
         <LoginBox>
           <LoginTitle>로그인</LoginTitle>

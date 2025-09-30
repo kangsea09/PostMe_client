@@ -1,59 +1,67 @@
-import React , {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Post from "../assets/Frame.svg";
+import Picture from "../assets/people.svg";
 import { getPost } from "../apis/post";
 import { useNavigate } from "react-router-dom";
 
 const PostList = () => {
   const [postList, setPostList] = useState([]);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async ()=> {
+    const fetchData = async () => {
       const res = await getPost();
       setPostList(res);
-    }
+    };
     fetchData();
   }, []);
-  
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date
-    .toLocaleDateString("ko-KR", {
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/\./g, "/") // "25. 09. 19." → "25/09/19"
-    .replace(/\s/g, ""); // 공백 제거
-};
 
-const handleClick = (id) => {
-  navigate(`/check-post/${id}`);
-}
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date
+      .toLocaleDateString("ko-KR", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/\./g, "/") // "25. 09. 19." → "25/09/19"
+      .replace(/\s/g, ""); // 공백 제거
+  };
+
+  const handleClick = (id) => {
+    navigate(`/check-post/${id}`);
+  };
 
   return (
     <Body>
       <TotalContainer>
         <ListBox>
-          <span>게시물 목록</span>
+          <TopContainer>
+            <span>게시물 목록</span>
+            <MyPageButton>
+              <img src={Picture} alt="" onClick={() => navigate("/myPage")} />
+            </MyPageButton>
+          </TopContainer>
+
           <ListContainer>
             <ListButton>
               <FirstList>
                 <img src={Post} alt="" />
                 <First>최신순</First>
               </FirstList>
-              <List onClick={() => navigate("/post-create")}>게시글 작성하기</List>
+              <List onClick={() => navigate("/post-create")}>
+                게시글 작성하기
+              </List>
             </ListButton>
-            {postList.map((post)=> (
-              <ListCard key={post.id} onClick={()=> handleClick(post.id)}>
-              <Title>
-                <InputTitle>{post.title}</InputTitle>
-                <span>{formatDate(post.createdAt)}</span>
-              </Title>
-            </ListCard>
+            {postList.map((post) => (
+              <ListCard key={post.id} onClick={() => handleClick(post.id)}>
+                <Title>
+                  <InputTitle>{post.title}</InputTitle>
+                  <span>{formatDate(post.createdAt)}</span>
+                </Title>
+              </ListCard>
             ))}
-            
           </ListContainer>
         </ListBox>
       </TotalContainer>
@@ -69,7 +77,7 @@ const Body = styled.div`
 const TotalContainer = styled.div`
   width: 100vh;
   height: 100vh;
-  padding-top: 67px;
+  padding-top: 53px;
 `;
 const ListBox = styled.div`
   width: 100%;
@@ -77,6 +85,21 @@ const ListBox = styled.div`
   flex-direction: column;
   gap: 30px;
   justify-content: center;
+`;
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const MyPageButton = styled.button`
+  border: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 `;
 const ListContainer = styled.div`
   display: flex;

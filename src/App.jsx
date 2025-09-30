@@ -5,6 +5,7 @@ import PostList from "./page/PostList";
 import CheckPost from "./page/CheckPost";
 import PostCreate from "./page/PostCreate";
 import PostEdit from "./page/PostEdit";
+import MyPage from "./page/MyPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/check-post/:id" element={<CheckPost />} />
       <Route path="/post-create" element={<PostCreate />} />
       <Route path="/post-edit" element={<PostEdit />} />
+      <Route path="/MyPage" element={<MyPage />} />
     </Routes>
   );
 }
