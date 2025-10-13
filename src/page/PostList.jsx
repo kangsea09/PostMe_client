@@ -26,7 +26,8 @@ const PostList = () => {
         day: "2-digit",
       })
       .replace(/\./g, "/") // "25. 09. 19." → "25/09/19"
-      .replace(/\s/g, ""); // 공백 제거
+      .replace(/\s/g, "") // 공백 제거
+      .replace(/\/$/, ""); // 마지막 / 제거
   };
 
   const handleClick = (id) => {

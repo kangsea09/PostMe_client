@@ -1,12 +1,26 @@
-import React, { isValidElement, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Picture from "../assets/people.svg";
 import Img from "../assets/arrow.svg";
 import Cat from "../assets/cat.svg";
 import { useNavigate } from "react-router-dom";
+import { mypage } from "../apis/auth";
 
 const MyPage = () => {
+  const [user, setUser] = useState({ id: "", email: "" });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await mypage();
+        setUser(res);
+      } catch (err) {
+        console.error("마이페이지 정보를 불러오지 못했습니다:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <Body>
@@ -14,15 +28,15 @@ const MyPage = () => {
         <TextList>
           <ListText onClick={() => navigate("/")}>게시물 목록</ListText>
           <img src={Img} alt="" />
-          <CheckText>게시글 상세 확인</CheckText>
+          <CheckText>마이페이지</CheckText>
         </TextList>
         <ProfileBox>
           <ProfileButton>
             <img src={Picture} alt="" />
           </ProfileButton>
           <TextBox>
-            <NameText>홍길동</NameText>
-            <EmailText>example@gmail.com</EmailText>
+            <NameText>{user.name}</NameText>
+            <EmailText>{user.email}</EmailText>
           </TextBox>
         </ProfileBox>
         <CatImg src={Cat} alt="" />

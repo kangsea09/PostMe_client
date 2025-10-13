@@ -14,3 +14,8 @@ export const me = async() => {
     const {data} = await api.get("/api/auth/me");
     return data;
 };
+
+export const mypage = async () => {
+  const { data } = await api.get("/api/auth/me");
+  return data;
+};
